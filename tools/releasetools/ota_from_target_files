@@ -507,6 +507,12 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
+  script.Print("_____________________________") 
+  script.Print("___    |_  __ \_  ___/__  __ )")
+  script.Print("__  /| |  / / /____ \__  __  |")
+  script.Print("_  ___ / /_/ /____/ /_  /_/ /") 
+  script.Print("/_/  |_\____/ /____/ /_____/") 
+
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
