@@ -448,19 +448,24 @@ def WriteFullOTAPackage(input_zip, output_zip):
       info_dict=OPTIONS.info_dict)
 
   #if not OPTIONS.omit_prereq:
-  #  ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
-  #  ts_text = GetBuildProp("ro.build.date", OPTIONS.info_dict)
-  #  script.AssertOlderBuild(ts, ts_text)
+  # ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
+  # ts_text = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+  # script.AssertOlderBuild(ts, ts_text)
 
   AppendAssertions(script, OPTIONS.info_dict)
   device_specific.FullOTA_Assertions()
+  script.Print(time.strftime("AOSB Built at: %Y-%m-%d %H:%M (%Z)", time.localtime()))
   device_specific.FullOTA_InstallBegin()
 
-  script.Print("_____________________________") 
-  script.Print("___    |_  __ \_  ___/__  __ )")
-  script.Print("__  /| |  / / /____ \__  __  |")
-  script.Print("_  ___ / /_/ /____/ /_  /_/ /") 
-  script.Print("/_/  |_\____/ /____/ /_____/") 
+  script.Print("_____________________________")
+  script.Print("___ |_ __ \_ ___/__ __ )")
+  script.Print("__ /| | / / /____ \__ __ |")
+  script.Print("_ ___ / /_/ /____/ /_ /_/ /")
+  script.Print("/_/ |_\____/ /____/ /_____/") 
+
+  device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
+  model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+  script.Print("Device: %s (%s)"%(model, device));
 
   if OPTIONS.backuptool:
     script.Mount("/system")
@@ -475,18 +480,20 @@ def WriteFullOTAPackage(input_zip, output_zip):
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 
+  script.Print("Format and Mount System, Mount Data...")
   script.FormatPartition("/system")
   script.Mount("/system")
   #script.UnpackPackageDir("recovery", "/system")
   script.UnpackPackageDir("system", "/system")
 
+  script.Print("Symlinks and permissions...")
   symlinks = CopySystemFiles(input_zip, output_zip)
   script.MakeSymlinks(symlinks)
 
   boot_img = common.GetBootableImage("boot.img", "boot.img",
                                      OPTIONS.input_tmp, "BOOT")
   #recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
-  #                                       OPTIONS.input_tmp, "RECOVERY")
+  # OPTIONS.input_tmp, "RECOVERY")
   #MakeRecoveryPatch(OPTIONS.input_tmp, output_zip, recovery_img, boot_img)
 
   Item.GetMetadata(input_zip)
@@ -501,6 +508,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
+  script.Print("Flashing Boot Image...")
   script.WriteRawImage("/boot", "boot.img")
 
   script.ShowProgress(0.1, 0)
