@@ -457,15 +457,25 @@ def WriteFullOTAPackage(input_zip, output_zip):
   script.Print(time.strftime("AOSB Built at: %Y-%m-%d %H:%M (%Z)", time.localtime()))
   device_specific.FullOTA_InstallBegin()
 
-  script.Print("_____________________________")
-  script.Print("___ |_ __ \_ ___/__ __ )")
-  script.Print("__ /| | / / /____ \__ __ |")
-  script.Print("_ ___ / /_/ /____/ /_ /_/ /")
-  script.Print("/_/ |_\____/ /____/ /_____/") 
+  script.Print("###################################");
+  script.Print("#                                 #");
+  script.Print("#            ____   _____ ____    #");
+  script.Print("#      /\   / __ \ / ____|  _ \   #");
+  script.Print("#     /  \ | |  | | (___ | |_) |  #");
+  script.Print("#    / /\ \| |  | |\___ \|  _ <   #");
+  script.Print("#   / ____ \ |__| |____) | |_) |  #");
+  script.Print("#  /_/    \_\____/|_____/|____/   #");
+  script.Print("#                                 #");
+  script.Print("#                                 #");
+  script.Print("# FB: http://fb.com/AOSB.Project  #");
+  script.Print("# Developer: http://codexc.com/me #");
+  script.Print("#                                 #");
+  script.Print("###################################");
 
   device = GetBuildProp("ro.product.device", OPTIONS.info_dict)
   model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
   script.Print("Device: %s (%s)"%(model, device));
+  script.Print("###################################");
 
   if OPTIONS.backuptool:
     script.Mount("/system")
