@@ -38,7 +38,7 @@ ifndef ($(strip $(TARGET_GCC_VERSION_ARM)),)
 TARGET_GCC_VERSION_ARM := 4.7
 endif
 
-ifndefeq ($(strip $(TARGET_GCC_VERSION_AND)),)
+ifndef ($(strip $(TARGET_GCC_VERSION_AND)),)
 TARGET_GCC_VERSION_AND := 4.7
 endif
 
