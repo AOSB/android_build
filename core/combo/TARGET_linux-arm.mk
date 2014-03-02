@@ -34,22 +34,6 @@ ifeq ($(strip $(TARGET_ARCH_VARIANT)),)
 TARGET_ARCH_VARIANT := armv5te
 endif
 
-ifeq ($(strip $(TARGET_GCC_VERSION_AND)),)
-TARGET_GCC_VERSION_AND := 4.7
-else
-TARGET_GCC_VERSION_AND := $(TARGET_GCC_VERSION_AND)
-endif
-
-ifeq ($(strip $(TARGET_GCC_VERSION_ARM)),)
-TARGET_GCC_VERSION_ARM := 4.7
-else
-TARGET_GCC_VERSION_ARM := $(TARGET_GCC_VERSION_ARM)
-endif
-
-# Specify Target Custom GCC Chains to use:
-TARGET_GCC_VERSION_AND := 4.8
-TARGET_GCC_VERSION_ARM := 4.8
-
 TARGET_ARCH_SPECIFIC_MAKEFILE := $(BUILD_COMBOS)/arch/$(TARGET_ARCH)/$(TARGET_ARCH_VARIANT).mk
 ifeq ($(strip $(wildcard $(TARGET_ARCH_SPECIFIC_MAKEFILE))),)
 $(error Unknown ARM architecture version: $(TARGET_ARCH_VARIANT))
