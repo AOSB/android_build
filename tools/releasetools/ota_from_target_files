@@ -512,6 +512,10 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   script.Print(time.strftime("AOSB Built at: %Y-%m-%d %H:%M (%Z)", time.localtime()))
   device_specific.FullOTA_InstallBegin()
 
+  script.Mount("/data")
+  script.ValidateSignatures("data")
+  script.Unmount("/data")
+
   script.Print("###################################");
   script.Print("#                                 #");
   script.Print("#            ____   _____ ____    #");
@@ -564,6 +568,8 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
   script.ShowProgress(0.2, 0)
+
+  script.ValidateSignatures("cleanup")
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)
@@ -627,7 +633,7 @@ def GetBuildProp(prop, info_dict):
   try:
     return info_dict.get("build.prop", {})[prop]
   except KeyError:
-    raise common.ExternalError("couldn't find %s in build.prop" % (prop,))
+    raise common.ExternalError("couldn't find %s in build.prop" % (property,))
 
 def AddToKnownPaths(filename, known_paths):
   if filename[-1] == "/":
