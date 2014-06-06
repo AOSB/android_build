@@ -919,7 +919,7 @@ else
     else:
       print "boot image unchanged; skipping."
 
-  if updating_recovery:
+  if updating_recovery and not OPTIONS.no_separate_recovery:
     # Recovery is generated as a patch using both the boot image
     # (which contains the same linux kernel as recovery) and the file
     # /system/etc/recovery-resource.dat (which contains all the images
