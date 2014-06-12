@@ -485,8 +485,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   #       set up system to update recovery partition on first boot
   #    complete script normally (allow recovery to mark itself finished and reboot)
 
-  recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
-                                         OPTIONS.input_tmp, "RECOVERY")
+#  recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
+#                                         OPTIONS.input_tmp, "RECOVERY")
   if OPTIONS.two_step:
     if not OPTIONS.info_dict.get("multistage_support", None):
       assert False, "two-step packages not supported by this build"
@@ -554,7 +554,7 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   if not OPTIONS.no_separate_recovery:
     recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
                                            OPTIONS.input_tmp, "RECOVERY")
-    MakeRecoveryPatch(OPTIONS.input_tmp, output_zip, recovery_img, boot_img)
+#   MakeRecoveryPatch(OPTIONS.input_tmp, output_zip, recovery_img, boot_img)
 
   Item.GetMetadata(input_zip)
   Item.Get("system").SetPermissions(script)
@@ -916,7 +916,7 @@ else
     else:
       print "boot image unchanged; skipping."
 
-  if updating_recovery:
+  if updating_recovery and not OPTIONS.no_separate_recovery:
     # Recovery is generated as a patch using both the boot image
     # (which contains the same linux kernel as recovery) and the file
     # /system/etc/recovery-resource.dat (which contains all the images
@@ -961,9 +961,9 @@ else
     script.Print("Unpacking new files...")
     script.UnpackPackageDir("system", "/system")
 
-  if updating_recovery and not OPTIONS.no_separate_recovery:
-    script.Print("Unpacking new recovery...")
-    script.UnpackPackageDir("recovery", "/system")
+##  if updating_recovery and not OPTIONS.no_separate_recovery:
+##    script.Print("Unpacking new recovery...")
+##    script.UnpackPackageDir("recovery", "/system")
 
   if len(renames) > 0:
     script.Print("Renaming files...")
