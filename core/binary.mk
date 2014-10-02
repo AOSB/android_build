@@ -357,6 +357,41 @@ LOCAL_STATIC_LIBRARIES += libprotobuf-cpp-2.3.0-lite
 endif
 endif
 
+# Pthread support wip
+# Required for linux-i686-4.8 TC
+# Only check for HOST_CC version, since it will be the same as HOST_C++ version
+ifeq (1,$(words $(filter oatdump dex2oat, $(LOCAL_MODULE))))
+ifneq ($(filter 4.8 4.8.% 4.9 4.9.% 4.10 4.10.%, $(shell $(HOST_CC) --version)),)
+ifneq ($(LOCAL_LDLIBS)),)
+LOCAL_LDLIBS += -ldl -lpthread
+else
+LOCAL_LDLIBS := -ldl -lpthread
+endif
+ifeq ($(HOST_OS),linux)
+LOCAL_LDLIBS += -lrt
+endif
+LOCAL_CFLAGS += -pthread
+LOCAL_CPPFLAGS += -pthread
+endif
+endif
+
+ifeq (1,$(words $(filter $(NO_ERROR_UA), $(LOCAL_MODULE))))
+LOCAL_CFLAGS += -Wno-error=unused-argument
+endif
+
+ifeq (1,$(words $(filter $(NO_ERROR_UP), $(LOCAL_MODULE))))
+LOCAL_CFLAGS += -Wno-error=unused-parameter
+endif
+
+ifneq (1,$(words $(filter $(DISABLE_GRAPHITE), $(LOCAL_MODULE))))
+LOCAL_CFLAGS += $(GRAPHITE_FLAGS)
+LOCAL_CPPFLAGS += $(GRAPHITE_FLAGS)
+endif
+
+ifneq (1,$(words $(filter $(DISABLE_GNU11), $(LOCAL_MODULE))))
+LOCAL_CFLAGS += $(call cc-option,-std=gnu11)
+LOCAL_CPPFLAGS += $(call cpp-option,-std=gnu++11)
+endif
 
 ###########################################################
 ## YACC: Compile .y files to .cpp and the to .o.
