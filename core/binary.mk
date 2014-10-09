@@ -381,6 +381,7 @@ endif
 
 ifeq (1,$(words $(filter $(NO_ERROR_UP), $(LOCAL_MODULE))))
 LOCAL_CFLAGS += -Wno-error=unused-parameter
+LOCAL_CPPFLAGS += -Wno-error=unused-parameter
 endif
 
 ifneq (1,$(words $(filter $(DISABLE_GRAPHITE), $(LOCAL_MODULE))))
